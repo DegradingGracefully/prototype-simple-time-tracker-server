@@ -24,28 +24,25 @@ var currentTaskTracking = mongoose.model("currentTaskTracking", currentTaskTrack
 var funcCheckUniqueDocumentOrCreate = async function() {
   var resultSave;
 
-  console.log("Setting up app => searching for the unique currentTaskTracking in database...");
+  console.log("Initializing app db => searching for the unique currentTaskTracking in database...");
 
-  const resultFind = await currentTaskTracking.find({}).exec((error, data) => {
-    if (error) return console.error(error);
-    return data;
-  });
-  console.log("Find() result: " + resultFind);
+  const resultFind = await currentTaskTracking.find({}).exec();
+  // console.log("Find() result: " + resultFind);
+  
 
-  if (resultFind == undefined) {
+  if (resultFind == undefined || resultFind == []) {
     console.log("currentTaskTracking document doesn't exist => creating it...");
     const uniqueCurrentTaskTracking = new currentTaskTracking({
       unique: "unique",
       task_id: "0",
       timeBegin: Date.now()
     });
-    resultSave = await uniqueCurrentTaskTracking.save((error, data) => {
-    if (error) return console.error(error);
-    return data;
-    });
+    resultSave = await uniqueCurrentTaskTracking.save();
+    console.log("Save() result: " + resultSave);
+    return resultSave;
+  } else {
+    console.log("Ok app already initialized...");
   }
-  console.log("Save() result: " + resultSave);
-  return resultSave;
 }
 
 funcCheckUniqueDocumentOrCreate();
@@ -59,6 +56,6 @@ var funcFindAll = async function() {
   });
 }
 
-funcFindAll();
+// funcFindAll();
 
 module.exports = currentTaskTracking;
