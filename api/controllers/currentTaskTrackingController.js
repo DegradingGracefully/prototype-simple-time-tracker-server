@@ -26,7 +26,6 @@ exports.addCurrentTaskTracking = async (req, res) => {
 
 exports.deleteCurrentTaskTracking = async (req, res) => {
   try {
-    const id = req.params.taskId;
     let result = await currentTaskTracking.remove({ unique: "unique" });
     res.status(200).json(result);
   } catch (err) {

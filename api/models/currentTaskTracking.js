@@ -9,7 +9,6 @@ let currentTaskTrackingSchema = mongoose.Schema({
     // current Task selected!
     // type: mongoose.Types.ObjectId,
     // ref: 'Tasks',
-    //https://stackoverflow.com/questions/26008555/foreign-key-mongoose
     type: String,
     required: true
   },
@@ -21,14 +20,13 @@ let currentTaskTrackingSchema = mongoose.Schema({
 
 var currentTaskTracking = mongoose.model("currentTaskTracking", currentTaskTrackingSchema);
 
+const ID_NO_TASK_TRACKING = 0; // represents the fact that we're not tracking any task currently
+
 var checkUniqueDocument = async function(done) {
   var resultSave;
 
   console.log("Initializing app db => searching for the unique currentTaskTracking in database...");
 
-  /*const resultFind = await currentTaskTracking.find({}).exec().then((data) => {
-    return data;
-  });*/
   await currentTaskTracking.find({}).exec((error, data) => {
     if (error) return console.error(error);
     
@@ -36,23 +34,6 @@ var checkUniqueDocument = async function(done) {
     done(data);
   });
 }
-
-  /*resultFind.then(data => {
-  console.log("data: " + data);
-  if (data == undefined || data == []) {
-    console.log("currentTaskTracking document doesn't exist => creating it...");
-    const uniqueCurrentTaskTracking = new currentTaskTracking({
-      unique: "unique",
-      task_id: "0",
-      timeBegin: Date.now()
-    });
-    resultSave = await uniqueCurrentTaskTracking.save();
-    console.log("Save() result: " + resultSave);
-    // return resultSave;
-  } else {
-    console.log("Ok app already initialized...");
-  }
-});*/
 
 function createUniqueDocumentIfNotExist(data) {
   if (data == undefined || !data.length) { // why test data.length ? because I don't know the "proper" or "official" way to test for an emtpy result
@@ -71,7 +52,5 @@ function createUniqueDocumentIfNotExist(data) {
 }
 
 checkUniqueDocument(createUniqueDocumentIfNotExist);
-
-// funcFindAll();
 
 module.exports = currentTaskTracking;
