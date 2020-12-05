@@ -1,0 +1,57 @@
+let mongoose = require("mongoose");
+let currentTaskTrackingSchema = mongoose.Schema({
+  unique: {
+    type: String,
+    required: true,
+  },
+  task_id: {
+    // no => can't store the "tasks" object _id in this field, because we put the value 0 when no
+    // current Task selected!
+    // type: mongoose.Types.ObjectId,
+    // ref: 'Tasks',
+    //https://stackoverflow.com/questions/26008555/foreign-key-mongoose
+    type: String,
+    required: true
+  },
+  timeBegin: {
+    type: Date,
+    required: true
+  }
+});
+
+var currentTaskTracking = mongoose.model("currentTaskTracking", currentTaskTrackingSchema);
+
+var funcCheckUniqueDocumentOrCreate = async function() {
+console.log("Setting up app => searching for the unique currentTaskTracking in database...");
+currentTaskTracking.find({}).exec().then((error, result) => {
+  console.log("error: " + error);
+  console.log("result: " + result);
+  if (result == undefined) {
+    console.log("currentTaskTracking document doesn't exist => creating it...");
+    const uniqueCurrentTaskTracking = new currentTaskTracking({
+      unique: "unique",
+      task_id: "0",
+      timeBegin: Date.now()
+    });
+    /*result = currentTaskTracking.save((error, result) => {
+      console.log("error: " + error);
+      console.log("result: " + result);
+    });
+    console.log("result: " + result);*/
+   /*  currentTaskTracking.save().then((error, result) => {
+      console.log("error: " + error);
+      console.log("result: " + result);
+    });*/
+    // const result2 = await currentTaskTracking.save();
+    const result2 = await currentTaskTracking.save((error, data) => {
+    if (error) return console.error(error);
+    return data;
+    });
+    console.log("result: " + result2);
+  }
+});
+}
+await funcCheckUniqueDocumentOrCreate();
+/*
+});*/
+module.exports = currentTaskTracking;

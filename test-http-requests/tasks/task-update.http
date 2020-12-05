@@ -1,0 +1,6 @@
+PUT http://localhost:4000/task/5fc91ed8df17191f0c1ba68e HTTP/1.1
+content-type: application/json
+
+{
+    "title": "posted from VS code / AND UPDATED FROM VS CODE TOO :P"
+}
