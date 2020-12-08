@@ -1,9 +1,9 @@
 let mongoose = require("mongoose");
 const currentTaskTracking = require("../models/currentTaskTracking");
 
-exports.allCurrentTaskTracking = async (req, res) => {
+exports.getUniqueTaskTracking = async (req, res) => {
   try {
-    let currentTaskTrackings = await currentTaskTracking.find({});
+    let currentTaskTrackings = await currentTaskTracking.findOne({});
     res.status(200).json(currentTaskTrackings);
   } catch (err) {
     res.status(500).json(err);
