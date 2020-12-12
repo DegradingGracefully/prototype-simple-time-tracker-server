@@ -1,10 +1,10 @@
 let mongoose = require("mongoose");
 let currentTaskTrackingSchema = mongoose.Schema({
-  unique: {
-    type: String,
-    required: true,
+  isTracking: {
+    type: Boolean,
+    required: true
   },
-  task_id: {
+  taskId: {
     // no => can't store the "tasks" object _id in this field, because we put the value 0 when no
     // current Task selected!
     // type: mongoose.Types.ObjectId,
@@ -12,7 +12,7 @@ let currentTaskTrackingSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  timeBegin: {
+  timeBeginTracking: {
     type: Date,
     required: true
   }
@@ -39,9 +39,9 @@ function createUniqueDocumentIfNotExist(data) {
   if (data == undefined || !data.length) { // why test data.length ? because I don't know the "proper" or "official" way to test for an emtpy result
   // of the mongoose find() method (supposed to return Document[]) . So thanks rsp @ https://stackoverflow.com/a/45172845
     const uniqueCurrentTaskTracking = new currentTaskTracking({
-      unique: "unique",
-      task_id: "0",
-      timeBegin: Date.now()
+      isTracking: false,
+      taskId: "0",
+      timeBeginTracking: Date.now()
     });
     uniqueCurrentTaskTracking.save().then(data => {
       console.log("Save() result: " + data);

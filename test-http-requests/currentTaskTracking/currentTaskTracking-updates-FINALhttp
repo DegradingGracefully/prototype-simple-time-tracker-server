@@ -2,5 +2,6 @@ PUT http://localhost:4000/currentTaskTracking HTTP/1.1
 content-type: application/json
 
 {
-    "task_id": "0"
+    "isTracking": false,
+    "taskId": "0"
 }

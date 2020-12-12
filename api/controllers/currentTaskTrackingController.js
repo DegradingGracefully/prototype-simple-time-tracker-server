@@ -13,8 +13,8 @@ exports.getUniqueTaskTracking = async (req, res) => {
 exports.addCurrentTaskTracking = async (req, res) => {
   try {
     const newCurrentTaskTracking = new currentTaskTracking({
-      unique: "unique",
-      task_id: "0",
+      isTracking: false,
+      taskId: "0",
       timeBegin: Date.now()
     });
     let newCurrentTaskTrackinResult = await newCurrentTaskTracking.save();
@@ -26,7 +26,7 @@ exports.addCurrentTaskTracking = async (req, res) => {
 
 exports.deleteCurrentTaskTracking = async (req, res) => {
   try {
-    let result = await currentTaskTracking.remove({ unique: "unique" });
+    let result = await currentTaskTracking.remove({}); // remove all (there is just one ... unique)
     res.status(200).json(result);
   } catch (err) {
     res.status(500).json(err);
@@ -35,7 +35,8 @@ exports.deleteCurrentTaskTracking = async (req, res) => {
 
 exports.updateCurrentTaskTracking  = async (req, res) => {
   try {
-    let result = await currentTaskTracking.update({ unique: "unique" }, req.body);
+    console.log("PUT http://localhost:4000/currentTaskTracking HTTP/1.1...");
+    let result = await currentTaskTracking.updateOne({}, req.body); // update all (there is just one ... unique)
     res.status(200).json(result);
   } catch (err) {
     res.status(500).json(err);

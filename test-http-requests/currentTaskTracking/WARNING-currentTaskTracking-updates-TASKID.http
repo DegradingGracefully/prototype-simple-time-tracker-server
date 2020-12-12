@@ -2,5 +2,5 @@ PUT http://localhost:4000/currentTaskTracking HTTP/1.1
 content-type: application/json
 
 {
-    "task_id": "updated with the _id of some task that exists"
+    "taskId": "updated with the _id of some task that exists"
 }
