@@ -27,6 +27,16 @@ exports.addTask = async (req, res) => {
 
 exports.deleteTask = async (req, res) => {
   try {
+    const id = req.params.taskId;
+    let result = await Task.findByIdAndRemove(id);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+exports.deleteAllTask = async (req, res) => {
+  try {
     let result = await Task.remove({});
     res.status(200).json(result);
   } catch (err) {

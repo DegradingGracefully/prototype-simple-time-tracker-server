@@ -18,9 +18,13 @@ exports.addCurrentTaskTracking = async (req, res) => {
       timeBegin: Date.now()
     });
     let newCurrentTaskTrackinResult = await newCurrentTaskTracking.save();
-    res.status(200).json({ data: newCurrentTaskTrackinResult });
+    res.status(200).json({
+      data: newCurrentTaskTrackinResult
+    });
   } catch (err) {
-    res.status(500).json({ error: err });
+    res.status(500).json({
+      error: err
+    });
   }
 };
 
@@ -33,7 +37,7 @@ exports.deleteCurrentTaskTracking = async (req, res) => {
   }
 };
 
-exports.updateCurrentTaskTracking  = async (req, res) => {
+exports.updateCurrentTaskTracking = async (req, res) => {
   try {
     console.log("PUT http://localhost:4000/currentTaskTracking HTTP/1.1...");
     let result = await currentTaskTracking.updateOne({}, req.body); // update all (there is just one ... unique)
