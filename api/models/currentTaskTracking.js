@@ -23,8 +23,6 @@ var currentTaskTracking = mongoose.model("currentTaskTracking", currentTaskTrack
 const ID_NO_TASK_TRACKING = 0; // represents the fact that we're not tracking any task currently
 
 var checkUniqueDocument = async function(done) {
-  var resultSave;
-
   console.log("Initializing app db => searching for the unique currentTaskTracking in database...");
 
   await currentTaskTracking.find({}).exec((error, data) => {
