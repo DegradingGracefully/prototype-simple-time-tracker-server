@@ -36,6 +36,10 @@ const taskSchema = mongoose.Schema({
   category: {
     type: String
   },
+  isRecurring: {
+    type: Boolean,
+    default: false
+  },
   created: {
     type: Date,
     default: Date.now()
@@ -43,7 +47,9 @@ const taskSchema = mongoose.Schema({
 })
 const Task = mongoose.model('Task', taskSchema);
 
-const taskTestArray = [
+const taskTestArray = [];
+
+const taskTestArray2 = [ //disabled
   new Task({
     title: 'test1 trackingByDate field',
     duration: 0,
@@ -215,6 +221,8 @@ async function computeAllTaskDurationForToday() {
   });
 }
 
-computeAllTaskDurationForToday();
+// computeAllTaskDurationForToday();
+
+// Task.updateMany({}, { $set: { "isRecurring": false }}); // add the isRecurring field to all tasks // not working but not needed anymore
 
 module.exports = Task;
