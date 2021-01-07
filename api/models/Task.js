@@ -1,19 +1,8 @@
 const mongoose = require('mongoose');
 
 const taskSchema = mongoose.Schema({
-  /*
-   * id
-   * title
-   * duration
-   * enabled (boolean)
-   * category (string)
-   */
   title: {
     type: String,
-    required: true
-  },
-  duration: {
-    type: Number,
     required: true
   },
   trackingByDate: [{
@@ -52,7 +41,6 @@ const taskTestArray = [];
 const taskTestArray2 = [ //disabled
   new Task({
     title: 'test1 trackingByDate field',
-    duration: 0,
     trackingByDate: [{
       dateBegin: new Date('2020-12-07T11:45:32'), // TODO => compute duration in seconds
       dateEnd: new Date('2020-12-07T12:33:32'),
@@ -61,7 +49,6 @@ const taskTestArray2 = [ //disabled
   }),
   new Task({
     title: 'test2 trackingByDate field',
-    duration: 0,
     trackingByDate: [{
       dateBegin: new Date('2020-12-12T22:22:32'), // TODO => compute duration in seconds
       dateEnd: new Date('2020-12-13T09:12:02'),
@@ -70,7 +57,6 @@ const taskTestArray2 = [ //disabled
   }),
   new Task({
     title: 'test3 task some trackingBydate today 2020/12/19',
-    duration: 0,
     trackingByDate: [{
       dateBegin: new Date('2020-12-19T09:22:32'), // TODO => compute duration in seconds
       dateEnd: new Date('2020-12-19T09:44:02'),
@@ -79,7 +65,6 @@ const taskTestArray2 = [ //disabled
   }),
   new Task({
     title: 'test4 got 2 trackingByDate occurences for today 2020/12/19',
-    duration: 0,
     trackingByDate: [{
       dateBegin: new Date('2020-12-19T09:22:32'), // TODO => compute duration in seconds
       dateEnd: new Date('2020-12-19T09:44:02'),
@@ -91,7 +76,6 @@ const taskTestArray2 = [ //disabled
   }),
    new Task({
     title: 'test5 got 2 trackingByDate occurences for today 2020/12/20',
-    duration: 0,
     trackingByDate: [{
       dateBegin: new Date('2020-12-20T09:22:32'), // TODO => compute duration in seconds
       dateEnd: new Date('2020-12-20T09:44:02'),
@@ -125,7 +109,7 @@ function createTaskTestIfNotExists(testTask, data) {
   }
 }
 
-function filterGivenTaskForGivenDayDuration() {
+function filterTasksWhichFallIntoGivenDay() {
   const givenDayBegin = new Date('2020-12-19T00:00:00');
   const givenDayEnd = new Date('2020-12-19T23:59:59');
   /* const givenDayMinus1 = givenDay.getDate() - 1;
@@ -161,7 +145,7 @@ function filterGivenTaskForGivenDayDuration() {
 
     // compute duration for the current day
 
-    console.log(`filterGivenTaskForGivenDayDuration result: ${data}`);
+    console.log(`filterTasksWhichFallIntoGivenDay result: ${data}`);
   });
 }
 
