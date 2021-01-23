@@ -18,6 +18,16 @@ const taskSchema = mongoose.Schema({
       type: Number
     }
   }],
+  correctDurationForDate: [{
+    date: {
+      type: Date,
+      required: true
+    },
+    nbSecondsCorrection: {
+      type: Number,
+      required: true
+    }
+  }],
   enabled: {
     type: Boolean,
     required: true

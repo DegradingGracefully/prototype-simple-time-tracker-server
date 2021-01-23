@@ -28,16 +28,19 @@ function computeTaskDurationForToday(task) {
     const todayDateBegin = new Date('2020-12-19T00:00:00');
     const todayDateEnd = new Date('2020-12-19T23:59:59');
 
-    console.log("------- computeTaskDurationForToday BEGIN -----------> " + task);
+    // console.log("------- computeTaskDurationForToday BEGIN -----------> " + task);
 
     // compute duration for the current day
+    // (contained in a) the trackingByDate array and b) the correctDurationForDate array)
+
+    // ***************  a) the trackingByDate array
     //err.. the mongo query gave us the Task object, but it comes with all its trackingByDate.. must refilter here on the current day again ???
-    const filter = (trackingByDate) => {
+    const filterTrackingByDate = (trackingByDate) => {
         if (trackingByDate.length === 0) {
             return false;
         } else {
             const today = new Date();
-            console.log("filter=>" + trackingByDate);
+            //console.log("filter=>" + trackingByDate);
             // checks if this trackingByDate item falls into today
             return trackingByDate.dateBegin.getFullYear() === today.getFullYear() &&
                 trackingByDate.dateBegin.getMonth() === today.getMonth() &&
@@ -45,20 +48,42 @@ function computeTaskDurationForToday(task) {
         }
     };
 
-    const reducer = (accumulator, currentTrackingByDate) => {
+    const reducerTrackingByDate = (accumulator, currentTrackingByDate) => {
         const durationMillis = currentTrackingByDate.dateEnd - currentTrackingByDate.dateBegin;
         const durationSeconds = Math.floor(durationMillis / 1000);
-        console.log("============");
+        /* console.log("============");
         console.log("durationSeconds" + durationSeconds);
         console.log("============");
-        console.log("accu" + (accumulator + durationSeconds));
+        console.log("accu" + (accumulator + durationSeconds)); */
         return accumulator + durationSeconds;
     };
 
-    console.log("taskController task.trackingByDate.filter(filter) =>" + task.trackingByDate.filter(filter));
+    // console.log("taskController task.trackingByDate.filter(filter) =>" + task.trackingByDate.filter(filter));
     // const durationForDaySeconds = task.trackingByDate.filter(filter).reduce(reducer);
-    const durationForTodaySeconds = task.trackingByDate.filter(filter).reduce(reducer, 0);
-    console.log(`Total duration for day: ${durationForTodaySeconds}`); // undefined? ??
+    const trackingByDateSumDurationsForToday = task.trackingByDate.filter(filterTrackingByDate).reduce(reducerTrackingByDate, 0);
+
+    // ***************  b) the correctDurationForDate array
+    const filterCorrectDurationForDate = (correctDurationForDate) => {
+        if (correctDurationForDate.length === 0) {
+            return false;
+        } else {
+            const today = new Date();
+            //console.log("filter=>" + correctDurationForDate);
+            // checks if this correctDurationForDate item falls into today
+            return correctDurationForDate.date.getFullYear() === today.getFullYear() &&
+                correctDurationForDate.date.getMonth() === today.getMonth() &&
+                correctDurationForDate.date.getDate() === today.getDate(); // getDate ??? https://stackoverflow.com/questions/43855166/how-to-tell-if-two-dates-are-in-the-same-day
+        }
+    };
+
+    const reducerCorrectDurationForDate = (accumulator, correctDurationForDate) => {
+        // console.log("accu correctDurationForDate " + (accumulator + correctDurationForDate.nbSecondsCorrection));
+        return accumulator + correctDurationForDate.nbSecondsCorrection;
+    };
+
+    const correctDurationForDateSumDurationsForToday = task.correctDurationForDate.filter(filterCorrectDurationForDate).reduce(reducerCorrectDurationForDate, 0);
+
+    // console.log(`Total duration for day: ${durationForTodaySeconds}`); // undefined? ??
 
     /* const copyTask = { ...task,
       ["durationForToday"]: durationForTodaySeconds
@@ -66,10 +91,10 @@ function computeTaskDurationForToday(task) {
     // https://mongoosejs.com/docs/api.html#document_Document-toObject ?
     // https://stackoverflow.com/questions/48014504/es6-spread-operator-mongoose-result-copy
     const copyTask = { ...task.toObject(),
-        ["durationForToday"]: durationForTodaySeconds
+        ["durationForToday"]: trackingByDateSumDurationsForToday + correctDurationForDateSumDurationsForToday
     };
 
-    console.log("------- computeTaskDurationForToday END -----------> " + copyTask);
+    // console.log("------- computeTaskDurationForToday END -----------> " + copyTask);
     return copyTask;
 }
 
@@ -92,23 +117,23 @@ exports.allTask = async (req, res) => {
 
         if (error) res.status(500).json(err);
 
-        console.log("found all tasks: " + tasks);
+        // console.log("found all tasks: " + tasks);
 
         let newTasks = tasks.filter(filter2);
-        console.log("filtered tasks =>" + newTasks);
+        // const displayTaskNames = newTasks.reduce((accu, task) => { return accu + `'${task.title}'\n` }, '');
+        // console.log(`Filtered today's taks, got ${newTasks.length} tasks:\n${displayTaskNames}`);
+        console.log(`Filtered today's tasks, got ${newTasks.length} tasks:`);
 
         // compute durations for today
         newTasks = newTasks.map((task) => {
             const newTask = computeTaskDurationForToday(task);
-            console.log("computed task=>" + newTask);
-            console.log("computed field=>" + newTask.durationForToday);
+            // console.log("computed task=>" + newTask);
+            console.log(`Task "${newTask.title}"'s durationForToday = ${newTask.durationForToday}`);
 
             return newTask;
         });
 
-        newTasks = newTasks;
-
-        console.log("newTasks = " + newTasks);
+        // console.log("newTasks = " + newTasks);
         res.status(200).json(newTasks);
     });
 };
