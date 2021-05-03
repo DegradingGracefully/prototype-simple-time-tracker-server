@@ -1,4 +1,4 @@
 module.exports = {
-    database: "mongodb://localhost:27017/timemore",
+    database: "mongodb://localhost:27017/timebrief",
     secret: "password"
   };
