@@ -1,6 +1,6 @@
 :warning: This is just a temporary repo that I had to publish in order to share some code ;) Indeed, even though I plan to open source some of these works eventually, please don't use these sources as they currently stand, since they currently don't have enough features (plus source code needs some refactoring and cleaning). :construction:
 
-ADD SAME TEXT a Client! It contains the server project of a simple time tracker prototype programmed in Node, Express, Svelte and MongoDB.
+This repository contains the server project of a simple time tracker prototype programmed in Node, Express, Svelte, Bulma CSS and MongoDB.
 
 The client part is @ [https://github.com/DegradingGracefully/prototype-simple-time-tracker-client](https://github.com/DegradingGracefully/prototype-simple-time-tracker-client) .
 
